@@ -210,3 +210,58 @@ wizard3.play = function () {
 wizard4.play = function () {
   console.log(`WEEEEE I'm a ${this.type}`);
 };
+
+// ==================================================
+
+// ES7
+
+// includes and raised-to-power
+
+// .includes() and **
+
+/**
+ 
+  > 'Helooo'.includes('o');
+  true
+
+  > const pets = ['cat','dog'];
+  > pets.includes('dog')
+  true
+  
+  > const square = (x) => x**2;
+ */
+
+// ==================================================
+
+// ES8
+
+// String padding
+
+// Trailing commas and functions and paremeter list and calls
+
+// Object.values and Object.entries, before these we only had Object.keys
+
+/**
+  
+  > 'Turtle'.padStart(10);
+  "          Turtle"
+
+  > 'Turtle'.padEnd(10);
+  "Turtle          "
+  
+  > const fun = (a,b,c,d,) =>{
+      console.log(a)
+    }
+
+  > fun(1,2,3,4,);
+  // this above is still valid js
+  // reason is sometimes people forget when there are tons of parameters
+
+
+ */
+
+// ==================================================
+
+// ES9 Async Await will be introduced later
+
+// ==================================================
