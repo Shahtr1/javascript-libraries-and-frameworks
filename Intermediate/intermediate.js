@@ -265,3 +265,183 @@ wizard4.play = function () {
 // ES9 Async Await will be introduced later
 
 // ==================================================
+
+// ES10
+
+// flat, flatMap, trimStart, trimEnd, formEntries, update to try catch by not forcing us to use parameter with catch block
+
+/**
+ 
+    const array = [1,2,3,4,5]
+    array.flat()
+
+    array.flat(3) // levels
+
+    // it also cleans up the data like for [1,2,3,,,,,,4,5] => [1,2,3,4,5]
+
+    const array = [1,2,[3,[4,5]]]
+
+    formEntries transforms a list of key value pairs into an object
+    
+    try{
+
+    }catch{
+
+    }
+
+ */
+
+// ==================================================
+
+// Advanced loops
+
+//  for of (for arrays, strings)    and      for in (for objects, arrays, strings)
+
+// ==================================================
+
+// ES2020
+
+// BigInt
+/** 
+ * add n
+
+  New type
+  > typeof 999999999999999999999999999999999999999999999999999999999999999    
+  "number"
+
+  >typeof 1n
+  "bigint"
+
+ */
+
+// Optional Chaining Operation ?.
+/** 
+ 
+  let will_pokemon = {
+    pikachu:{
+      species: 'Mouse',
+      height: 0.4,
+      weight: 6
+    }
+  }
+
+  let andrei_pokemon = {
+    raichu:{
+      species: 'Mouse',
+      height: 0.8,
+      weight: 30
+    }
+  }
+
+  let weight = will_pokemon.pikachu.weight;
+  console.log(weight);  // will be 6
+
+  let weight2 = andrei_pokemon.pikachu.weight; // error as Cannot read property 'weight' of undefined
+  console.log(weight2);
+  
+  let weight3 = andrei_pokemon?.pikachu?.weight; // no error now
+  console.log(weight3); // undefined
+
+
+ */
+
+// Nullish Coalescing Operation ??
+/** 
+ let will_pokemon = {
+    pikachu:{
+      species: 'Mouse',
+      height: 0.4,
+      weight: 6,
+      power: 'lightning'
+    }
+  }
+
+  let power = will_pokemon?.pikachu?.power || 'no power'
+  let power = will_pokemon?.pikachu?.power ?? 'no power'
+
+  || checks truthy
+  ?? checks null or undefined only
+
+  console.log(power)
+  
+
+ */
+
+// globalThis
+// points to Window object
+// But why do we need this
+// It works outside the browser as well
+
+// Promising.allSttled       (later)
+
+// ==================================================
+
+// ES2021
+// string function (replaceAll)
+
+// ==================================================
+
+//  Modules
+// Reduce Global namespace pollution
+// dont use inline scripts and inline script tags
+// all the functions created there gets added to Window object
+
+// Solution:
+// IIFE (Immediately Invoked Function Execution)
+
+// --------------------------IIFE--------------------------
+var myApp = {};
+
+(function () {
+  myApp.add = function (a, b) {
+    return a + b;
+  };
+})();
+// By using the above method and executing it, we dont pollute the global namespace as they have function scope, only myApp has global scope
+// But still one more issue the order of files are still important, the script tags
+
+// jQuery uses this: allows us to use $
+
+// --------------------------CommonJS + Browserify--------------
+// in one js file
+module.exports = function add(a, b) {
+  return a + b;
+};
+
+// in another js file
+var add = require("./add");
+
+// browserify uses this commonJS syntax, its actually a module bundlar, it bundles everything into a single file
+
+<script src="bundle.js"></script>;
+
+// --------------------------------ES6+Webpack2---------------------
+// With the introduction of es6 we can do stuff mich nicer
+// we have export and import
+
+// in one js file
+export const add = (a, b) => a + b;
+// or
+export default function add() {
+  return a + b;
+}
+
+// in another js file
+import { add } from "./add"; // can export multiple
+or;
+import add from "./add"; // can export only one thing
+
+// Browsers arent supporting it yet
+
+// Webpack is a bundler too
+// with Webpack we can use es6 in all browsers
+
+// Webpack has a config file
+
+module.exports = {
+  entry: "./app/main.js",
+  output: {
+    path: "./dist",
+    filename: "bundle.js",
+  },
+};
