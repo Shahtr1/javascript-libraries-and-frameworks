@@ -53,7 +53,7 @@ function emptyCart(user) {
   return Object.assign({}, user, { cart: [] });
 }
 
-function getUserState()
-function goBackInHistory()
+function getUserState() {}
+function goBackInHistory() {}
 
 console.log(amazonHistory);
