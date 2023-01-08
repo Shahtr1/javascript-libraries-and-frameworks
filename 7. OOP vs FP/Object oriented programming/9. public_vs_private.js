@@ -1,0 +1,3 @@
+/*
+    pound sign makes variables private
+*/
