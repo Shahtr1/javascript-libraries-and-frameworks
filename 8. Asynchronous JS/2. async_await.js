@@ -48,17 +48,16 @@ const urls = [
 ];
 
 const getData = async function () {
-  try {
-    const [users, posts, albums] = await Promise.all(
-      urls.map((url) => {
-        return fetch(url).then((resp) => resp.json());
-      })
-    );
+  const [users, posts, albums] = await Promise.all(
+    urls.map(async (url) => {
+      const response = await fetch(url);
+      return response.json();
+    })
+  );
 
-    console.log(users);
-    console.log(posts);
-    console.log(albums);
-  } catch {
-    console.log("oops");
-  }
+  console.log(users);
+  console.log(posts);
+  console.log(albums);
 };
+
+getData();
