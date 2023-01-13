@@ -1,22 +1,20 @@
-/Typescript/pure_typescript/node_modules
-
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/Angular/ngrx/dist
-/Angular/ngrx/tmp
-/Angular/ngrx/out-tsc
+/ngrx/dist
+/ngrx/tmp
+/ngrx/out-tsc
 
 # dependencies
-/Angular/ngrx/node_modules
+/ngrx/node_modules
 
 # IDEs and editors
-/Angular/ngrx/.idea
-/Angular/ngrx.project
-/Angular/ngrx.classpath
-/Angular/ngrx.c9/
+/ngrx/.idea
+/ngrx.project
+/ngrx.classpath
+/ngrx.c9/
 *.launch
-/Angular/ngrx.settings/
+/ngrx.settings/
 *.sublime-workspace
 
 # IDE - VSCode
@@ -27,11 +25,11 @@
 !.vscode/extensions.json
 
 # misc
-/Angular/ngrx/.angular/cache
-/Angular/ngrx/.sass-cache
-/Angular/ngrx/connect.lock
-/Angular/ngrx/coverage
-/Angular/ngrx/libpeerconnection.log
+/ngrx/.angular/cache
+/ngrx/.sass-cache
+/ngrx/connect.lock
+/ngrx/coverage
+/ngrx/libpeerconnection.log
 npm-debug.log
 testem.log
 /typings
