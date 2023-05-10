@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../core/user.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-up',
@@ -7,10 +8,16 @@ import { UserService } from '../core/user.service';
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
-  username = '';
-  email = '';
-  password = '';
-  passwordRepeat = '';
+  form = new FormGroup({
+    username: new FormControl('', [
+      Validators.required,
+      Validators.minLength(4),
+    ]),
+    email: new FormControl(''),
+    password: new FormControl(''),
+    passwordRepeat: new FormControl(''),
+  });
+
   apiProgress = false;
   signUpSuccess = false;
   constructor(private userService: UserService) {}
@@ -18,19 +25,19 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {}
 
   isDisabled() {
-    return this.password ? this.password !== this.passwordRepeat : true;
+    return this.form.get('password')?.value
+      ? this.form.get('password')?.value !==
+          this.form.get('passwordRepeat')?.value
+      : true;
   }
 
   onClickSignUp() {
+    const body = this.form.value;
+    delete body.passwordRepeat;
+
     this.apiProgress = true;
-    this.userService
-      .signUp({
-        username: this.username,
-        password: this.password,
-        email: this.email,
-      })
-      .subscribe(() => {
-        this.signUpSuccess = true;
-      });
+    this.userService.signUp(body).subscribe(() => {
+      this.signUpSuccess = true;
+    });
   }
 }

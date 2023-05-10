@@ -6,7 +6,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { SharedModule } from '../shared/shared.module';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('SignUpComponent', () => {
   let component: SignUpComponent;
@@ -15,7 +15,7 @@ describe('SignUpComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SignUpComponent],
-      imports: [HttpClientTestingModule, SharedModule, FormsModule],
+      imports: [HttpClientTestingModule, SharedModule, ReactiveFormsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SignUpComponent);
@@ -201,6 +201,55 @@ describe('SignUpComponent', () => {
       expect(
         signUp.querySelector('div[data-testid="form-sign-up"]')
       ).toBeFalsy();
+    });
+
+    it('displays Username is required message when username is null', () => {
+      const signUp = fixture.nativeElement as HTMLElement;
+
+      expect(
+        signUp.querySelector('div[data-testid="username-validation"]')
+      ).toBeNull();
+
+      const usernameInput = signUp.querySelector(
+        'input[id="username"]'
+      ) as HTMLInputElement;
+      usernameInput.dispatchEvent(new Event('focus'));
+      usernameInput.dispatchEvent(new Event('blur'));
+
+      fixture.detectChanges();
+
+      const validationElement = signUp.querySelector(
+        'div[data-testid="username-validation"]'
+      );
+
+      expect(validationElement?.textContent?.trim()).toBe(
+        'Username is required'
+      );
+    });
+
+    it('displays length error when username is less than 4 characters', () => {
+      const signUp = fixture.nativeElement as HTMLElement;
+
+      expect(
+        signUp.querySelector('div[data-testid="username-validation"]')
+      ).toBeNull();
+
+      const usernameInput = signUp.querySelector(
+        'input[id="username"]'
+      ) as HTMLInputElement;
+      usernameInput.value = '123';
+      usernameInput.dispatchEvent(new Event('input'));
+      usernameInput.dispatchEvent(new Event('blur'));
+
+      fixture.detectChanges();
+
+      const validationElement = signUp.querySelector(
+        'div[data-testid="username-validation"]'
+      );
+
+      expect(validationElement?.textContent?.trim()).toBe(
+        'Username must be at least 4 characters long'
+      );
     });
   });
 });
