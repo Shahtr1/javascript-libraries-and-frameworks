@@ -1,15 +1,40 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { SignUpComponent } from './sign-up.component';
 import userEvent from '@testing-library/user-event';
-import 'whatwg-fetch';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import { AlertComponent } from '../shared/alert/alert.component';
+import { ButtonComponent } from '../shared/button/button.component';
+import { SharedModule } from '../shared/shared.module';
+
+let requestBody: any;
+let counter = 0;
+const server = setupServer(
+  rest.post('/api/1.0/users', (req, res, ctx) => {
+    requestBody = req.body;
+    counter += 1;
+    return res(ctx.status(200), ctx.json({}));
+  })
+);
+
+beforeEach(() => {
+  counter = 0;
+});
+
+beforeAll(() => {
+  server.listen();
+});
+
+afterAll(() => {
+  server.close();
+});
 
 const setup = async () => {
-  await render(SignUpComponent, { imports: [HttpClientTestingModule] });
+  await render(SignUpComponent, {
+    imports: [HttpClientModule, SharedModule],
+    declarations: [],
+  });
 };
 
 describe('SignUpComponent', () => {
@@ -66,21 +91,9 @@ describe('SignUpComponent', () => {
   });
 
   describe('Interactions', function () {
-    it('enables the button when the password and password repeat fields have same value ', async () => {
+    let button: any;
+    const setupForm = async () => {
       await setup();
-      const password = screen.getByLabelText('Password');
-      const passwordRepeat = screen.getByLabelText('Password Repeat');
-      await userEvent.type(password, 'password');
-      await userEvent.type(passwordRepeat, 'password');
-
-      const button = screen.getByRole('button', { name: 'Sign Up' });
-      expect(button).toBeEnabled();
-    });
-
-    it('sends username, email and password to backend after clicking the button ', async () => {
-      await setup();
-
-      const httpTestingController = TestBed.inject(HttpTestingController);
       const username = screen.getByLabelText('Username');
       const email = screen.getByLabelText('E-mail');
       const password = screen.getByLabelText('Password');
@@ -90,17 +103,76 @@ describe('SignUpComponent', () => {
       await userEvent.type(password, 'password');
       await userEvent.type(passwordRepeat, 'password');
 
-      const button = screen.getByRole('button', { name: 'Sign Up' });
+      button = screen.getByRole('button', { name: 'Sign Up' });
+    };
+
+    it('enables the button when the password and password repeat fields have same value ', async () => {
+      await setupForm();
+      expect(button).toBeEnabled();
+    });
+
+    it('sends username, email and password to backend after clicking the button ', async () => {
+      await setupForm();
       await userEvent.click(button);
 
-      const req = httpTestingController.expectOne('/api/1.0/users');
-      const requestBody = req.request.body;
-
-      expect(requestBody).toEqual({
-        username: 'user1',
-        password: 'password',
-        email: 'user1@gmail.com',
+      await waitFor(() => {
+        expect(requestBody).toEqual({
+          username: 'user1',
+          password: 'password',
+          email: 'user1@gmail.com',
+        });
       });
+    });
+
+    it('disables button when there is an ongoing api call', async () => {
+      await setupForm();
+      await userEvent.click(button);
+      await userEvent.click(button);
+      await waitFor(() => {
+        expect(counter).toBe(1);
+      });
+    });
+
+    it('displays spinner after clicking the submit', async () => {
+      await setupForm();
+
+      // as we are looking for no-existent element, we cant ise getByRole, use queryByRole
+      // because of aria-hidden="true" we are not able to access it, so test fails so we use hidden:true
+      expect(
+        screen.queryByRole('status', { hidden: true })
+      ).not.toBeInTheDocument();
+      await userEvent.click(button);
+      expect(
+        screen.queryByRole('status', { hidden: true })
+      ).toBeInTheDocument();
+    });
+
+    it('displays account activation notification after successful sign up request', async () => {
+      await setupForm();
+      expect(
+        screen.queryByText('Please check your e-mail to activate your account')
+      ).not.toBeInTheDocument();
+
+      await userEvent.click(button);
+
+      // wait for test to appear
+      const text = await screen.findByText(
+        'Please check your e-mail to activate your account'
+      );
+      expect(text).toBeInTheDocument();
+    });
+
+    it('hides sign up form after successful sign up request', async () => {
+      await setupForm();
+
+      // as form is already there, we know that
+      const form = screen.getByTestId('form-sign-up');
+      await userEvent.click(button);
+
+      await screen.findByText(
+        'Please check your e-mail to activate your account'
+      );
+      expect(form).not.toBeInTheDocument();
     });
   });
 });

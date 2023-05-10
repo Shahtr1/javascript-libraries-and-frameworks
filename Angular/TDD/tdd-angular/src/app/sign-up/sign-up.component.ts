@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { UserService } from '../core/user.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,7 +12,9 @@ export class SignUpComponent implements OnInit {
   email = '';
   password = '';
   passwordRepeat = '';
-  constructor(private httpClient: HttpClient) {}
+  apiProgress = false;
+  signUpSuccess = false;
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {}
 
@@ -36,24 +39,15 @@ export class SignUpComponent implements OnInit {
   }
 
   onClickSignUp() {
-    // fetch('/api/1.0/users', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     username: this.username,
-    //     password: this.password,
-    //     email: this.email,
-    //   }),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
-
-    this.httpClient
-      .post('/api/1.0/users', {
+    this.apiProgress = true;
+    this.userService
+      .signUp({
         username: this.username,
         password: this.password,
         email: this.email,
       })
-      .subscribe(() => {});
+      .subscribe(() => {
+        this.signUpSuccess = true;
+      });
   }
 }

@@ -61,14 +61,15 @@
           },
           "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "tdd-angular:build:production"
+              "browserTarget": "tdd-angular:build:production",
             },
             "development": {
-              "browserTarget": "tdd-angular:build:development"
+              "browserTarget": "tdd-angular:build:development",
             }
           },
           "defaultConfiguration": "development"
