@@ -7,6 +7,7 @@ import { setupServer } from 'msw/node';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { ButtonComponent } from '../shared/button/button.component';
 import { SharedModule } from '../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 let requestBody: any;
 let counter = 0;
@@ -32,7 +33,7 @@ afterAll(() => {
 
 const setup = async () => {
   await render(SignUpComponent, {
-    imports: [HttpClientModule, SharedModule],
+    imports: [HttpClientModule, SharedModule, FormsModule],
     declarations: [],
   });
 };

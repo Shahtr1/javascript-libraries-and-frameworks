@@ -12,7 +12,8 @@
         <input
           id="username"
           class="form-control"
-          (input)="onChangeUsername($event)"
+          name="username"
+          [(ngModel)]="username"
         />
       </div>
       <div class="mb-3">
@@ -20,7 +21,8 @@
         <input
           id="email"
           class="form-control"
-          (input)="onChangeEmail($event)"
+          name="email"
+          [(ngModel)]="email"
         />
       </div>
       <div class="mb-3">
@@ -29,7 +31,8 @@
           type="password"
           class="form-control"
           id="password"
-          (input)="onChangePassword($event)"
+          name="password"
+          [(ngModel)]="password"
         />
       </div>
       <div class="mb-3">
@@ -38,7 +41,8 @@
           type="password"
           id="passwordRepeat"
           class="form-control"
-          (input)="onChangePasswordRepeat($event)"
+          name="passwordRepeat"
+          [(ngModel)]="passwordRepeat"
         />
       </div>
       <div class="text-center">
