@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 export class UserService {
   constructor(private httpClient: HttpClient) {}
 
-  signUp(
+  signUp$(
     body: Partial<{
       username: string | null;
       email: string | null;
@@ -15,5 +15,9 @@ export class UserService {
     }>
   ) {
     return this.httpClient.post('/api/1.0/users', body);
+  }
+
+  isEmailTaken$(email: string) {
+    return this.httpClient.post('/api/1.0/user/email', { email });
   }
 }

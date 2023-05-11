@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../core/user.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { passwordMatchValidator } from './password-match.validator';
+import { UniqueEmailValidator } from './unique-email.validator';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,7 +16,13 @@ export class SignUpComponent implements OnInit {
         Validators.required,
         Validators.minLength(4),
       ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', {
+        validators: [Validators.required, Validators.email],
+        asyncValidators: [
+          this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator),
+        ],
+        updateOn: 'blur',
+      }),
       password: new FormControl('', [
         Validators.required,
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/),
@@ -27,7 +34,10 @@ export class SignUpComponent implements OnInit {
 
   apiProgress = false;
   signUpSuccess = false;
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private uniqueEmailValidator: UniqueEmailValidator
+  ) {}
 
   ngOnInit(): void {}
 
@@ -50,6 +60,8 @@ export class SignUpComponent implements OnInit {
         return 'E-mail is required';
       } else if (field.errors['email']) {
         return 'Invalid e-mail address';
+      } else if (field.errors['uniqueEmail']) {
+        return 'E-mail in use';
       }
     }
     return;
@@ -89,7 +101,7 @@ export class SignUpComponent implements OnInit {
     delete body.passwordRepeat;
 
     this.apiProgress = true;
-    this.userService.signUp(body).subscribe(() => {
+    this.userService.signUp$(body).subscribe(() => {
       this.signUpSuccess = true;
     });
   }

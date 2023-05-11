@@ -126,6 +126,7 @@ describe('SignUpComponent', () => {
 
       emailInput.value = 'user1@gmail.com';
       emailInput.dispatchEvent(new Event('input'));
+      emailInput.dispatchEvent(new Event('blur'));
 
       passwordInput.value = 'password';
       passwordInput.dispatchEvent(new Event('input'));
@@ -258,12 +259,12 @@ describe('SignUpComponent', () => {
           signUp.querySelector(`div[data-testid="${field}-validation"]`)
         ).toBeNull();
 
-        const usernameInput = signUp.querySelector(
+        const input = signUp.querySelector(
           `input[id="${field}"]`
         ) as HTMLInputElement;
-        usernameInput.value = value;
-        usernameInput.dispatchEvent(new Event('input'));
-        usernameInput.dispatchEvent(new Event('blur'));
+        input.value = value;
+        input.dispatchEvent(new Event('input'));
+        input.dispatchEvent(new Event('blur'));
 
         fixture.detectChanges();
 
@@ -273,6 +274,43 @@ describe('SignUpComponent', () => {
 
         expect(validationElement?.textContent?.trim()).toBe(error);
       });
+    });
+
+    it(`displays E-mail in use when email is not unique`, () => {
+      let httpTestingController = TestBed.inject(HttpTestingController);
+
+      const signUp = fixture.nativeElement as HTMLElement;
+
+      expect(
+        signUp.querySelector(`div[data-testid="email-validation"]`)
+      ).toBeNull();
+
+      const input = signUp.querySelector(
+        `input[id="email"]`
+      ) as HTMLInputElement;
+      const emailValue = 'non-unique-email@mail.com';
+      input.value = emailValue;
+      input.dispatchEvent(new Event('input'));
+      input.dispatchEvent(new Event('blur'));
+      const request = httpTestingController.expectOne(
+        ({ url, method, body }) => {
+          if (url === '/api/1.0/user/email' && method === 'POST') {
+            return body.email === emailValue;
+          }
+          return false;
+        }
+      );
+
+      // return a response (success)
+      request.flush({});
+
+      fixture.detectChanges();
+
+      const validationElement = signUp.querySelector(
+        `div[data-testid="email-validation"]`
+      );
+
+      expect(validationElement?.textContent?.trim()).toBe('E-mail in use');
     });
   });
 });
