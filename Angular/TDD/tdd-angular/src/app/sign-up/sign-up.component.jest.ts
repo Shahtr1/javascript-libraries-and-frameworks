@@ -176,4 +176,37 @@ describe('SignUpComponent', () => {
       expect(form).not.toBeInTheDocument();
     });
   });
+
+  /*
+   * ${''} gives error
+   * so we use {space}{backspace}, as that's what the user does.
+   * */
+
+  describe('Validations', () => {
+    it.each`
+      label         | inputValue              | message
+      ${'Username'} | ${'{space}{backspace}'} | ${'Username is required'}
+      ${'Username'} | ${'123'}                | ${'Username must be at least 4 characters long'}
+      ${'E-mail'}   | ${'{space}{backspace}'} | ${'E-mail is required'}
+      ${'E-mail'}   | ${'wrong-format'}       | ${'Invalid e-mail address'}
+      ${'Password'} | ${'{space}{backspace}'} | ${'Password is required'}
+      ${'Password'} | ${'password'}           | ${'Password must have atleast 1 uppercase, 1 lowercase letter and 1 number'}
+      ${'Password'} | ${'passWORD'}           | ${'Password must have atleast 1 uppercase, 1 lowercase letter and 1 number'}
+      ${'Password'} | ${'pas12'}              | ${'Password must have atleast 1 uppercase, 1 lowercase letter and 1 number'}
+      ${'Password'} | ${'PASS1234'}           | ${'Password must have atleast 1 uppercase, 1 lowercase letter and 1 number'}
+      ${'Password'} | ${'pass'}               | ${'Password mismatch'}
+    `(
+      'displays $message when $label has the value "$inputValue"',
+      async ({ label, inputValue, message }) => {
+        await setup();
+        expect(screen.queryByText(message)).not.toBeInTheDocument();
+        const input = screen.getByLabelText(label);
+
+        await userEvent.type(input, inputValue);
+
+        await userEvent.tab();
+        expect(screen.queryByText(message)).toBeInTheDocument();
+      }
+    );
+  });
 });

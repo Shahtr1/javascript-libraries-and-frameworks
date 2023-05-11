@@ -202,54 +202,77 @@ describe('SignUpComponent', () => {
         signUp.querySelector('div[data-testid="form-sign-up"]')
       ).toBeFalsy();
     });
+  });
 
-    it('displays Username is required message when username is null', () => {
-      const signUp = fixture.nativeElement as HTMLElement;
+  describe('Validations', function () {
+    const testCases = [
+      { field: 'username', value: '', error: 'Username is required' },
+      {
+        field: 'username',
+        value: '123',
+        error: 'Username must be at least 4 characters long',
+      },
+      { field: 'email', value: '', error: 'E-mail is required' },
+      {
+        field: 'email',
+        value: 'wrong-format',
+        error: 'Invalid e-mail address',
+      },
+      { field: 'password', value: '', error: 'Password is required' },
+      {
+        field: 'password',
+        value: 'password',
+        error:
+          'Password must have atleast 1 uppercase, 1 lowercase letter and 1 number',
+      },
+      {
+        field: 'password',
+        value: 'passWORD',
+        error:
+          'Password must have atleast 1 uppercase, 1 lowercase letter and 1 number',
+      },
+      {
+        field: 'password',
+        value: 'pas12',
+        error:
+          'Password must have atleast 1 uppercase, 1 lowercase letter and 1 number',
+      },
+      {
+        field: 'password',
+        value: 'PASS1234',
+        error:
+          'Password must have atleast 1 uppercase, 1 lowercase letter and 1 number',
+      },
+      {
+        field: 'passwordRepeat',
+        value: 'pass',
+        error: 'Password mismatch',
+      },
+    ];
 
-      expect(
-        signUp.querySelector('div[data-testid="username-validation"]')
-      ).toBeNull();
+    testCases.forEach(({ field, value, error }) => {
+      it(`displays ${error} when field has '${value}'`, () => {
+        const signUp = fixture.nativeElement as HTMLElement;
 
-      const usernameInput = signUp.querySelector(
-        'input[id="username"]'
-      ) as HTMLInputElement;
-      usernameInput.dispatchEvent(new Event('focus'));
-      usernameInput.dispatchEvent(new Event('blur'));
+        expect(
+          signUp.querySelector(`div[data-testid="${field}-validation"]`)
+        ).toBeNull();
 
-      fixture.detectChanges();
+        const usernameInput = signUp.querySelector(
+          `input[id="${field}"]`
+        ) as HTMLInputElement;
+        usernameInput.value = value;
+        usernameInput.dispatchEvent(new Event('input'));
+        usernameInput.dispatchEvent(new Event('blur'));
 
-      const validationElement = signUp.querySelector(
-        'div[data-testid="username-validation"]'
-      );
+        fixture.detectChanges();
 
-      expect(validationElement?.textContent?.trim()).toBe(
-        'Username is required'
-      );
-    });
+        const validationElement = signUp.querySelector(
+          `div[data-testid="${field}-validation"]`
+        );
 
-    it('displays length error when username is less than 4 characters', () => {
-      const signUp = fixture.nativeElement as HTMLElement;
-
-      expect(
-        signUp.querySelector('div[data-testid="username-validation"]')
-      ).toBeNull();
-
-      const usernameInput = signUp.querySelector(
-        'input[id="username"]'
-      ) as HTMLInputElement;
-      usernameInput.value = '123';
-      usernameInput.dispatchEvent(new Event('input'));
-      usernameInput.dispatchEvent(new Event('blur'));
-
-      fixture.detectChanges();
-
-      const validationElement = signUp.querySelector(
-        'div[data-testid="username-validation"]'
-      );
-
-      expect(validationElement?.textContent?.trim()).toBe(
-        'Username must be at least 4 characters long'
-      );
+        expect(validationElement?.textContent?.trim()).toBe(error);
+      });
     });
   });
 });

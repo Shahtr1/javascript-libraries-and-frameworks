@@ -9,20 +9,18 @@
     <form class="card-body" (ngSubmit)="onClickSignUp()" [formGroup]="form">
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
-        <input id="username" class="form-control" formControlName="username" />
+        <input
+          id="username"
+          class="form-control"
+          [class.is-invalid]="usernameError"
+          formControlName="username"
+        />
         <div
           data-testid="username-validation"
-          *ngIf="
-            form.get('username')?.errors &&
-            (form.get('username')?.touched || form.get('username')?.dirty)
-          "
+          class="invalid-feedback"
+          *ngIf="usernameError"
         >
-          <div *ngIf="form.get('username')?.errors?.['required']">
-            Username is required
-          </div>
-          <div *ngIf="form.get('username')?.errors?.['minlength']">
-            Username must be at least 4 characters long
-          </div>
+          {{ usernameError }}
         </div>
       </div>
       <div class="mb-3">
@@ -30,9 +28,16 @@
         <input
           id="email"
           class="form-control"
-          name="email"
+          [class.is-invalid]="emailError"
           formControlName="email"
         />
+        <div
+          data-testid="email-validation"
+          class="invalid-feedback"
+          *ngIf="emailError"
+        >
+          {{ emailError }}
+        </div>
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Password</label>
@@ -40,9 +45,16 @@
           type="password"
           class="form-control"
           id="password"
-          name="password"
           formControlName="password"
+          [class.is-invalid]="passwordError"
         />
+        <div
+          data-testid="password-validation"
+          class="invalid-feedback"
+          *ngIf="passwordError"
+        >
+          {{ passwordError }}
+        </div>
       </div>
       <div class="mb-3">
         <label for="passwordRepeat" class="form-label">Password Repeat</label>
@@ -50,9 +62,16 @@
           type="password"
           id="passwordRepeat"
           class="form-control"
-          name="passwordRepeat"
           formControlName="passwordRepeat"
+          [class.is-invalid]="passwordRepeatError"
         />
+        <div
+          data-testid="passwordRepeat-validation"
+          class="invalid-feedback"
+          *ngIf="passwordRepeatError"
+        >
+          {{ passwordRepeatError }}
+        </div>
       </div>
       <div class="text-center">
         <app-button [disabled]="isDisabled()" [apiProgress]="apiProgress"
