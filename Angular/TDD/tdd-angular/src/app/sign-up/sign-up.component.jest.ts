@@ -31,6 +31,7 @@ const server = setupServer(
 
 beforeEach(() => {
   counter = 0;
+  server.resetHandlers();
 });
 
 beforeAll(() => {
@@ -111,13 +112,13 @@ describe('SignUpComponent', () => {
       const passwordRepeat = screen.getByLabelText('Password Repeat');
       await userEvent.type(username, 'user1');
       await userEvent.type(email, 'user1@gmail.com');
-      await userEvent.type(password, 'password');
-      await userEvent.type(passwordRepeat, 'password');
+      await userEvent.type(password, 'P4ssword');
+      await userEvent.type(passwordRepeat, 'P4ssword');
 
       button = screen.getByRole('button', { name: 'Sign Up' });
     };
 
-    it('enables the button when the password and password repeat fields have same value ', async () => {
+    it('enables the button when all the fields have valid input ', async () => {
       await setupForm();
       expect(button).toBeEnabled();
     });
@@ -129,7 +130,7 @@ describe('SignUpComponent', () => {
       await waitFor(() => {
         expect(requestBody).toEqual({
           username: 'user1',
-          password: 'password',
+          password: 'P4ssword',
           email: 'user1@gmail.com',
         });
       });
@@ -184,6 +185,46 @@ describe('SignUpComponent', () => {
         'Please check your e-mail to activate your account'
       );
       expect(form).not.toBeInTheDocument();
+    });
+
+    it('displays validation error coming from backend after submit failure', async () => {
+      server.use(
+        rest.post('/api/1.0/users', (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              validationErrors: { email: 'E-mail in use' },
+            })
+          );
+        })
+      );
+
+      await setupForm();
+      await userEvent.click(button);
+
+      const errorMessage = await screen.findByText('E-mail in use');
+      expect(errorMessage).toBeInTheDocument();
+    });
+
+    it('hides spinner after sign up request fails', async () => {
+      server.use(
+        rest.post('/api/1.0/users', (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              validationErrors: { email: 'E-mail in use' },
+            })
+          );
+        })
+      );
+
+      await setupForm();
+      await userEvent.click(button);
+
+      await screen.findByText('E-mail in use');
+      expect(
+        screen.queryByRole('status', { hidden: true })
+      ).not.toBeInTheDocument();
     });
   });
 

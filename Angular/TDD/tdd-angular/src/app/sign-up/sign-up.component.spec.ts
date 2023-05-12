@@ -99,10 +99,12 @@ describe('SignUpComponent', () => {
     let button: any;
     let httpTestingController: HttpTestingController;
     let signUp: HTMLElement;
-    const setupForm = () => {
+    const setupForm = async () => {
       httpTestingController = TestBed.inject(HttpTestingController);
 
       signUp = fixture.nativeElement as HTMLElement;
+
+      await fixture.whenStable();
 
       const usernameInput = signUp.querySelector(
         'input[id="username"]'
@@ -128,11 +130,13 @@ describe('SignUpComponent', () => {
       emailInput.dispatchEvent(new Event('input'));
       emailInput.dispatchEvent(new Event('blur'));
 
-      passwordInput.value = 'password';
+      passwordInput.value = 'P4ssword';
       passwordInput.dispatchEvent(new Event('input'));
+      emailInput.dispatchEvent(new Event('blur'));
 
-      passwordRepeatInput.value = 'password';
+      passwordRepeatInput.value = 'P4ssword';
       passwordRepeatInput.dispatchEvent(new Event('input'));
+      emailInput.dispatchEvent(new Event('blur'));
 
       // angular detects changes delayed
       fixture.detectChanges();
@@ -140,13 +144,13 @@ describe('SignUpComponent', () => {
       button = signUp.querySelector('button');
     };
 
-    it('enables the button when the password and password repeat fields have same value ', function () {
-      setupForm();
+    it('enables the button when all the fields have valid input ', async function () {
+      await setupForm();
       expect(button?.disabled).toBeFalsy();
     });
 
-    it('sends username, email and password to backend after clicking the button ', function () {
-      setupForm();
+    it('sends username, email and password to backend after clicking the button ', async function () {
+      await setupForm();
       button.click();
 
       const req = httpTestingController.expectOne('/api/1.0/users');
@@ -154,13 +158,13 @@ describe('SignUpComponent', () => {
 
       expect(requestBody).toEqual({
         username: 'user1',
-        password: 'password',
+        password: 'P4ssword',
         email: 'user1@gmail.com',
       });
     });
 
-    it('disables button when there is an ongoing api call', () => {
-      setupForm();
+    it('disables button when there is an ongoing api call', async () => {
+      await setupForm();
       button.click();
       fixture.detectChanges(); // make sure ui is updated
       button.click();
@@ -168,8 +172,8 @@ describe('SignUpComponent', () => {
       expect(button.disabled).toBeTruthy();
     });
 
-    it('displays spinner after clicking the submit', () => {
-      setupForm();
+    it('displays spinner after clicking the submit', async () => {
+      await setupForm();
       expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
 
       button.click();
@@ -177,8 +181,8 @@ describe('SignUpComponent', () => {
       expect(signUp.querySelector('span[role="status"]')).toBeTruthy();
     });
 
-    it('displays account activation notification after successful sign up request', () => {
-      setupForm();
+    it('displays account activation notification after successful sign up request', async () => {
+      await setupForm();
       expect(signUp.querySelector('.alert-success')).toBeFalsy(); // should be visible after clicking the button
       button.click();
       const req = httpTestingController.expectOne('/api/1.0/users');
@@ -190,8 +194,8 @@ describe('SignUpComponent', () => {
       );
     });
 
-    it('hides sign up form after successful sign up request', () => {
-      setupForm();
+    it('hides sign up form after successful sign up request', async () => {
+      await setupForm();
       expect(
         signUp.querySelector('div[data-testid="form-sign-up"]')
       ).toBeTruthy();
@@ -202,6 +206,44 @@ describe('SignUpComponent', () => {
       expect(
         signUp.querySelector('div[data-testid="form-sign-up"]')
       ).toBeFalsy();
+    });
+
+    it('displays validation error coming from backend after submit failure', async () => {
+      await setupForm();
+      button.click();
+      const req = httpTestingController.expectOne('/api/1.0/users');
+
+      // set response body as an empty object
+      req.flush(
+        {
+          validationErrors: { email: 'E-mail in use' },
+        },
+        { status: 400, statusText: 'Bad Request' }
+      );
+      fixture.detectChanges();
+
+      const validationElement = signUp.querySelector(
+        `div[data-testid="email-validation"]`
+      );
+
+      expect(validationElement?.textContent?.trim()).toBe('E-mail in use');
+    });
+
+    it('hides spinner after sign up request fails', async () => {
+      await setupForm();
+      button.click();
+      const req = httpTestingController.expectOne('/api/1.0/users');
+
+      // set response body as an empty object
+      req.flush(
+        {
+          validationErrors: { email: 'E-mail in use' },
+        },
+        { status: 400, statusText: 'Bad Request' }
+      );
+      fixture.detectChanges();
+
+      expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
     });
   });
 

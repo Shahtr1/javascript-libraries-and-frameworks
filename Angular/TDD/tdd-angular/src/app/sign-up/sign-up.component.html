@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="text-center">
-        <app-button [disabled]="isDisabled()" [apiProgress]="apiProgress"
+        <app-button [disabled]="this.form.invalid" [apiProgress]="apiProgress"
           >Sign Up</app-button
         >
       </div>
