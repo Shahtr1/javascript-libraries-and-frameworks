@@ -17,7 +17,9 @@ describe('SignUpComponent', () => {
       declarations: [SignUpComponent],
       imports: [HttpClientTestingModule, SharedModule, ReactiveFormsModule],
     }).compileComponents();
+  });
 
+  beforeEach(async () => {
     fixture = TestBed.createComponent(SignUpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
