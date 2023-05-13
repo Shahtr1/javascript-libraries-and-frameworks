@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
+import userEvent from '@testing-library/user-event/index';
 
 type RouteParams = { id: string };
 let subscriber!: Subscriber<RouteParams>;
@@ -68,5 +69,16 @@ describe('Account Activation Page', () => {
 
     const message = await screen.findByText('Activation failure');
     expect(message).toBeInTheDocument();
+  });
+
+  it('displays spinner during activation requests', async () => {
+    await setup();
+    subscriber.next({ id: '456' });
+
+    const spinner = await screen.findByRole('status');
+    console.log('spinner', spinner);
+
+    await screen.findByText('Activation failure');
+    expect(spinner).not.toBeInTheDocument();
   });
 });
