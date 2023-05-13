@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { routes } from './router/app-router.module';
+import userEvent from '@testing-library/user-event';
 
 const setup = async (path: string) => {
   const { navigate } = await render(AppComponent, {
@@ -22,10 +23,44 @@ describe('Routing', () => {
     path         | pageId
     ${'/'}       | ${'home-page'}
     ${'/signup'} | ${'sign-up-page'}
+    ${'/login'}  | ${'login-page'}
+    ${'/user/1'} | ${'user-page'}
+    ${'/user/2'} | ${'user-page'}
   `('displays $pageId when path is $path', async ({ path, pageId }) => {
     await setup(path);
 
     const page = screen.queryByTestId(pageId);
     expect(page).toBeInTheDocument();
   });
+
+  it.each`
+    path         | title
+    ${'/'}       | ${'Home'}
+    ${'/signup'} | ${'Sign Up'}
+    ${'/login'}  | ${'Login'}
+  `('has a link with title $title to $path', async ({ path, title }) => {
+    await setup(path);
+
+    const link = screen.queryByRole('link', {
+      name: title,
+    });
+    expect(link).toBeInTheDocument();
+  });
+
+  it.each`
+    initialPath  | clickingTo   | visiblePage
+    ${'/'}       | ${'Sign Up'} | ${'sign-up-page'}
+    ${'/signup'} | ${'Home'}    | ${'home-page'}
+    ${'/'}       | ${'Login'}   | ${'login-page'}
+  `(
+    `displays $visiblePage after clicking $clickingTo link`,
+    async ({ initialPath, clickingTo, visiblePage }) => {
+      await setup(initialPath);
+
+      const link = screen.getByRole('link', { name: clickingTo });
+      await userEvent.click(link);
+      const page = await screen.findByTestId(visiblePage);
+      expect(page).toBeInTheDocument();
+    }
+  );
 });
