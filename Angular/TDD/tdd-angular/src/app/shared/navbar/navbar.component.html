@@ -1,12 +1,24 @@
 <nav class="navbar navbar-expand navbar-light bg-light shadow-sm">
   <div class="container">
-    <a class="navbar-brand" routerLink="/" title="Home">
+    <a class="navbar-brand" routerLink="/" data-testid="home-link" title="Home">
       <img src="assets/hoaxify.png" alt="hoaxify-logo" width="60" />
       Hoaxify</a
     >
     <ul class="navbar-nav">
-      <a class="nav-link" routerLink="/signup" title="Sign Up">Sign Up</a>
-      <a class="nav-link" routerLink="/login" title="Login">Login</a>
+      <a
+        class="nav-link"
+        routerLink="/signup"
+        data-testid="sign-up-link"
+        title="Sign Up"
+        >Sign Up</a
+      >
+      <a
+        class="nav-link"
+        routerLink="/login"
+        data-testid="login-link"
+        title="Login"
+        >Login</a
+      >
     </ul>
   </div>
 </nav>

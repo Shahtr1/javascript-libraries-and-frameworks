@@ -44,33 +44,34 @@ describe('Routing', () => {
     expect(page).toBeInTheDocument();
   });
 
-  // TODO: check why the below test is failing for value ${'/'} | ${'Home'}
   it.each`
-    path         | title
-    ${'/signup'} | ${'Sign Up'}
-    ${'/login'}  | ${'Login'}
-  `('has a link with title $title to $path', async ({ path, title }) => {
+    path         | test
+    ${'/'}       | ${'home-link'}
+    ${'/signup'} | ${'sign-up-link'}
+    ${'/login'}  | ${'login-link'}
+  `('has a link with title $title to $path', async ({ path, test }) => {
     await setup(path);
 
-    const link = screen.queryByRole('link', {
-      name: title,
-    });
-    expect(link).toBeInTheDocument();
+    const anchorElement: HTMLAnchorElement = await screen.findByTestId(test);
+
+    expect(anchorElement.href.replace(window.location.origin, '')).toBe(path);
   });
 
-  // TODO: check why the below test is failing for value     ${'/signup'} | ${'Home'} | ${'home-page'}
+  // TODO: check why the below test is failing for value
 
   it.each`
-    initialPath | clickingTo   | visiblePage
-    ${'/'}      | ${'Sign Up'} | ${'sign-up-page'}
-    ${'/'}      | ${'Login'}   | ${'login-page'}
+    initialPath  | test              | visiblePage
+    ${'/signup'} | ${'home-link'}    | ${'home-page'}
+    ${'/'}       | ${'sign-up-link'} | ${'sign-up-page'}
+    ${'/'}       | ${'login-link'}   | ${'login-page'}
   `(
     `displays $visiblePage after clicking $clickingTo link`,
-    async ({ initialPath, clickingTo, visiblePage }) => {
+    async ({ initialPath, test, visiblePage }) => {
       await setup(initialPath);
 
-      const link = screen.getByRole('link', { name: clickingTo });
-      await userEvent.click(link);
+      const anchorElement: HTMLAnchorElement = await screen.findByTestId(test);
+
+      await userEvent.click(anchorElement);
       const page = await screen.findByTestId(visiblePage);
       expect(page).toBeInTheDocument();
     }
