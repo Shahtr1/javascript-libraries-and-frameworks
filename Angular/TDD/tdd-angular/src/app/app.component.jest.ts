@@ -57,8 +57,6 @@ describe('Routing', () => {
     expect(anchorElement.href.replace(window.location.origin, '')).toBe(path);
   });
 
-  // TODO: check why the below test is failing for value
-
   it.each`
     initialPath  | test              | visiblePage
     ${'/signup'} | ${'home-link'}    | ${'home-page'}
