@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { routes } from './router/app-router.module';
 import userEvent from '@testing-library/user-event';
 import { UserComponent } from './user/user.component';
@@ -63,7 +63,7 @@ const setup = async (path: string) => {
       LoginComponent,
       ActivateComponent,
     ],
-    imports: [HttpClientModule, SharedModule, ReactiveFormsModule],
+    imports: [HttpClientModule, SharedModule, ReactiveFormsModule, FormsModule],
     routes: routes,
   });
 

@@ -18,7 +18,7 @@ export class ActivateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
       this.activationStatus = 'inProgress';
-      this.userService.activate(params['id']).subscribe({
+      this.userService.activate$(params['id']).subscribe({
         next: () => {
           this.activationStatus = 'success';
         },

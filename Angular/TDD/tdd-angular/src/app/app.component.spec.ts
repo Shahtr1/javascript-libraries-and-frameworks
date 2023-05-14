@@ -15,7 +15,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { SharedModule } from './shared/shared.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { ActivateComponent } from './activate/activate.component';
 import { UserComponent } from './user/user.component';
@@ -39,6 +39,7 @@ describe('AppComponent', () => {
         HttpClientTestingModule,
         SharedModule,
         ReactiveFormsModule,
+        FormsModule,
       ],
 
       declarations: [
