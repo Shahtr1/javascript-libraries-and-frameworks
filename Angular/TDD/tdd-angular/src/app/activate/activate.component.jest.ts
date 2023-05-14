@@ -1,4 +1,4 @@
-import { render, waitFor, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { ActivateComponent } from './activate.component';
 import { Observable, Subscriber } from 'rxjs';
 import { AlertComponent } from '../shared/alert/alert.component';
@@ -6,7 +6,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import userEvent from '@testing-library/user-event/index';
 
 type RouteParams = { id: string };
 let subscriber!: Subscriber<RouteParams>;
@@ -27,7 +26,10 @@ const server = setupServer(
   rest.post('/api/1.0/users/token/:token', (req, res, ctx) => {
     counter += 1;
     if (req.params['token'] === '456') {
-      return res(ctx.status(400), ctx.json({}));
+      // if our server (msw) responds too fast,
+      // our test might be a bit slow to validate the visibility of spinner.
+      // We can slow down the msw server using delay.
+      return res(ctx.status(400), ctx.json({}), ctx.delay(50));
     }
     return res(ctx.status(200));
   })
