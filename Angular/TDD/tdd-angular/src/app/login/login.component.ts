@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserService } from '../core/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../core/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,10 @@ export class LoginComponent implements OnInit {
 
   apiProgress = false;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -34,13 +38,17 @@ export class LoginComponent implements OnInit {
 
   onClickLogin() {
     this.apiProgress = true;
-    this.userService.authenticate$(this.email, this.password).subscribe({
-      next: () => {},
-      error: (err: HttpErrorResponse) => {
-        this.error = err.error.message;
-        this.apiProgress = false;
-      },
-    });
+    this.authenticationService
+      .authenticate$(this.email, this.password)
+      .subscribe({
+        next: (body) => {
+          this.router.navigate(['/']);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.error = err.error.message;
+          this.apiProgress = false;
+        },
+      });
   }
 
   isInvalid(field: FormControl) {

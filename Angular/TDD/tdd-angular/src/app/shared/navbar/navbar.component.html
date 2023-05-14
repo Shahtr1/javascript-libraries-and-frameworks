@@ -6,6 +6,7 @@
     >
     <ul class="navbar-nav">
       <a
+        *ngIf="!authenticationService.loggedInUser.isLoggedIn"
         class="nav-link"
         routerLink="/signup"
         data-testid="sign-up-link"
@@ -13,11 +14,28 @@
         >Sign Up</a
       >
       <a
+        *ngIf="!authenticationService.loggedInUser.isLoggedIn"
         class="nav-link"
         routerLink="/login"
         data-testid="login-link"
         title="Login"
         >Login</a
+      >
+      <a
+        *ngIf="authenticationService.loggedInUser.isLoggedIn"
+        class="nav-link"
+        [routerLink]="'/user/' + authenticationService.loggedInUser.id"
+        data-testid="my-profile-link"
+        title="My Profile"
+        >My Profile</a
+      >
+      <span
+        *ngIf="authenticationService.loggedInUser.isLoggedIn"
+        class="nav-link"
+        data-testid="my-profile-link"
+        title="Logout"
+        (click)="logout()"
+        >Logout</span
       >
     </ul>
   </div>
