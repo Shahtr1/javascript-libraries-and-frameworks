@@ -113,4 +113,17 @@ describe('UserListComponent', () => {
     const previousPageRequest = httpTestingController.expectOne(() => true);
     expect(previousPageRequest.request.params.get('page')).toBe('0');
   });
+
+  it('displays spinner during the api call', () => {
+    const request = httpTestingController.expectOne(() => true);
+    expect(
+      fixture.nativeElement.querySelector('span[role="status"]')
+    ).toBeTruthy();
+
+    request.flush(getPage(0, 3));
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('span[role="status"]')
+    ).toBeFalsy();
+  });
 });

@@ -15,6 +15,8 @@ export class UserListComponent implements OnInit {
     totalPages: 0,
   };
 
+  fetchingData = false;
+
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
@@ -22,8 +24,10 @@ export class UserListComponent implements OnInit {
   }
 
   loadData(pageNumber: number = 0) {
+    this.fetchingData = true;
     this.userService.loadUsers$(pageNumber).subscribe((responseBody) => {
       this.page = responseBody as UserPage;
+      this.fetchingData = false;
     });
   }
 
