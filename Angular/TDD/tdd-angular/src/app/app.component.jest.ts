@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event';
 import { UserComponent } from './user/user.component';
 import { LoginComponent } from './login/login.component';
 import { ActivateComponent } from './activate/activate.component';
+import { UserListComponent } from './home/user-list/user-list.component';
 
 const setup = async (path: string) => {
   const { navigate } = await render(AppComponent, {
@@ -17,6 +18,7 @@ const setup = async (path: string) => {
       HomeComponent,
       SignUpComponent,
       UserComponent,
+      UserListComponent,
       LoginComponent,
       ActivateComponent,
     ],

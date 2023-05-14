@@ -78,7 +78,6 @@ describe('Account Activation Page', () => {
     subscriber.next({ id: '456' });
 
     const spinner = await screen.findByRole('status');
-    console.log('spinner', spinner);
 
     await screen.findByText('Activation failure');
     expect(spinner).not.toBeInTheDocument();

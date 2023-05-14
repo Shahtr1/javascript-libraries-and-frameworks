@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { UserComponent } from './user/user.component';
 import { ActivateComponent } from './activate/activate.component';
 import { RxjsPracticeComponent } from './rxjs/rxjs-practice.component';
+import { UserListComponent } from './home/user-list/user-list.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { RxjsPracticeComponent } from './rxjs/rxjs-practice.component';
     UserComponent,
     ActivateComponent,
     RxjsPracticeComponent,
+    UserListComponent,
   ],
   imports: [
     BrowserModule,

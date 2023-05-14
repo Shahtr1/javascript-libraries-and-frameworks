@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="card-header test-center"><h3>Users</h3></div>
+  <ul class="list-group list-group-flush">
+    <li
+      class="list-group-item list-group-item-action"
+      *ngFor="let user of page.content"
+    >
+      {{ user.username }}
+    </li>
+  </ul>
+  <button
+    *ngIf="hasPreviousPage"
+    (click)="loadData(page.page - 1)"
+    data-testid="previous-button"
+  >
+    &lt; previous
+  </button>
+  <button
+    *ngIf="hasNextPage"
+    (click)="loadData(page.page + 1)"
+    data-testid="next-button"
+  >
+    next &gt;
+  </button>
+</div>
