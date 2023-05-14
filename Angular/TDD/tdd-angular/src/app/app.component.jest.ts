@@ -122,7 +122,7 @@ describe('Routing', () => {
     await setup('/');
     const userListItem = await screen.findByText('user1');
     await userEvent.click(userListItem);
-    // const page = await screen.findByTestId('user-page');
-    // expect(page).toBeInTheDocument();
+    const page = await screen.findByTestId('user-page');
+    expect(page).toBeInTheDocument();
   });
 });
