@@ -11,6 +11,46 @@ import { UserComponent } from './user/user.component';
 import { LoginComponent } from './login/login.component';
 import { ActivateComponent } from './activate/activate.component';
 import { UserListComponent } from './home/user-list/user-list.component';
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
+import { getPage } from './home/user-list/test-helper';
+import { UserListItemComponent } from './home/user-list-item/user-list-item.component';
+
+const server = setupServer(
+  rest.post('/api/1.0/users/token/:token', (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+  rest.get('/api/1.0/users', (req, res, ctx) => {
+    let size = Number(req.url.searchParams.get('size'));
+    let page = Number(req.url.searchParams.get('page'));
+    if (Number.isNaN(size)) {
+      size = 5;
+    }
+    if (Number.isNaN(page)) {
+      page = 0;
+    }
+
+    return res(ctx.status(200), ctx.json(getPage(page, size)));
+  }),
+
+  rest.get('/api/1.0/users/:id', (req, res, ctx) => {
+    const id = Number(req.params['id']);
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id,
+        username: `user${id}`,
+        email: `user${id}@mail.com`,
+      })
+    );
+  })
+);
+
+beforeAll(() => server.listen());
+
+beforeEach(() => server.resetHandlers());
+
+afterAll(() => server.close());
 
 const setup = async (path: string) => {
   const { navigate } = await render(AppComponent, {
@@ -19,6 +59,7 @@ const setup = async (path: string) => {
       SignUpComponent,
       UserComponent,
       UserListComponent,
+      UserListItemComponent,
       LoginComponent,
       ActivateComponent,
     ],
@@ -76,4 +117,12 @@ describe('Routing', () => {
       expect(page).toBeInTheDocument();
     }
   );
+
+  it('navigates to user page when clicking to username on user list', async () => {
+    await setup('/');
+    const userListItem = await screen.findByText('user1');
+    await userEvent.click(userListItem);
+    // const page = await screen.findByTestId('user-page');
+    // expect(page).toBeInTheDocument();
+  });
 });

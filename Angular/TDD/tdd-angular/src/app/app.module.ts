@@ -14,6 +14,8 @@ import { UserComponent } from './user/user.component';
 import { ActivateComponent } from './activate/activate.component';
 import { RxjsPracticeComponent } from './rxjs/rxjs-practice.component';
 import { UserListComponent } from './home/user-list/user-list.component';
+import { UserListItemComponent } from './home/user-list-item/user-list-item.component';
+import { ProfileCardComponent } from './user/profile-card/profile-card.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { UserListComponent } from './home/user-list/user-list.component';
     ActivateComponent,
     RxjsPracticeComponent,
     UserListComponent,
+    UserListItemComponent,
+    ProfileCardComponent,
   ],
   imports: [
     BrowserModule,
