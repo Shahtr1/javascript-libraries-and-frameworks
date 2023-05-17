@@ -1,0 +1,34 @@
+<h2>Multi-slot content projection</h2>
+
+<hr />
+
+Default:
+<ng-content></ng-content>
+<hr />
+
+Question:
+<ng-content select="[question]"></ng-content>
+
+<hr />
+
+Conditional content projection:
+<br />
+<br />
+<div *ngIf="true">
+  <ng-container [ngTemplateOutlet]="content.templateRef"></ng-container>
+</div>
+<!--If your component needs to conditionally render content, or render content multiple times,
+you should configure that component to accept an <ng-template> element-->
+
+<!--In the component that accepts an <ng-template> element, use an <ng-container> element to render that template,-->
+
+<!--This example uses the ngTemplateOutlet directive to render a given <ng-template> element,
+ which you will define in a later step.-->
+
+<!--You can apply an ngTemplateOutlet directive to any type of element.
+This example assigns the directive to an <ng-container> element because the component does not need to render a real DOM element.-->
+<hr />
+
+<!--In some cases, you might want to project content as a different element.-->
+<!--For example, the content you want to project might be a child of another element.
+Accomplish this with the ngProjectAs attribute.-->
