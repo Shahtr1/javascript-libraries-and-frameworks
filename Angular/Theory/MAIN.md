@@ -207,4 +207,14 @@ temperature | number: '1.0-0'
     Add or remove elements from the DOM
     - ngTemplate
       Under the hood angular depends on ng-template element for rendering content manipulated by the structural directives.
-      It is not recognized by the browser, the purpose is to store one or more elements in memory
+      It is not recognized by the browser, the purpose is to store one or more elements in
+
+---
+
+## NPX
+
+npx is how we instruct nodejs to run an executable inside bin folder
+
+---
+
+A memory leak us when a variable is not uninitialized
