@@ -238,3 +238,22 @@ A memory leak us when a variable is not uninitialized
 ## NgSubmit
 
 It prevents the browser from auto refreshing when the form is submitted
+
+---
+
+## NgModel
+
+Creates a FormControl instance from a domain model and binds it to a form element, exported from FormsModule
+can be added to any element that dont have formControl or formControlName
+name attribute is like id to the control
+
+Two way binding:
+combines the two syntax together
+it sets and emit the value
+<input [(ngModel)]="" />
+
+is same as
+
+<input [value]="" (change)="" />
+
+Under the hood, template forms use FormGroups and FormControls
