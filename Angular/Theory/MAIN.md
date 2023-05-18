@@ -218,3 +218,23 @@ npx is how we instruct nodejs to run an executable inside bin folder
 ---
 
 A memory leak us when a variable is not uninitialized
+
+---
+
+## Forms
+
+- Reactive forms: Harder to learn, more flexible, scalable, configured through class
+- Template forms: Easier to learn, less flexible, better for small forms, configured through templates
+
+---
+
+## Ng-template vs Ng-container
+
+- ng-container: Content is always rendered
+- ng-template: Content must be conditionally rendered, we need to add a structural directive to conditionally render it
+
+---
+
+## NgSubmit
+
+It prevents the browser from auto refreshing when the form is submitted
