@@ -286,3 +286,14 @@ Imperative programming focuses in the HOW wheras declarative programming focuses
     return arr.reduce((prev, current) => prev + current, 0)
   }
 ```
+
+## ng add
+
+its similar to npm install command.
+npm will just install the package and update the package file and thats it
+ng or Angular cli will search for installation instructions inside the package and executes it, it helps us integrate application with our project
+
+## What are web tokens?
+
+- Encoded strings for storing data
+- Digitally signed
