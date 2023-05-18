@@ -250,10 +250,39 @@ name attribute is like id to the control
 Two way binding:
 combines the two syntax together
 it sets and emit the value
+
+```bash
 <input [(ngModel)]="" />
+```
 
 is same as
 
+```bash
 <input [value]="" (change)="" />
+```
 
 Under the hood, template forms use FormGroups and FormControls
+
+## Imperative and Declarative programming
+
+Imperative programming focuses in the HOW wheras declarative programming focuses on the WHAT
+
+- Imperative example:
+
+```bash
+  function add(arr){
+    let result = 0;
+    for (let i = 0; i < arr.length; i++){
+      result += arr[i]
+    }
+    return result;
+  }
+```
+
+- Declarative example:
+
+```bash
+  function add(arr){
+    return arr.reduce((prev, current) => prev + current, 0)
+  }
+```
