@@ -297,3 +297,56 @@ ng or Angular cli will search for installation instructions inside the package a
 
 - Encoded strings for storing data
 - Digitally signed
+
+## History API
+
+history.pushState(null, null, 'Pizza')
+the path will be updated and page wont be refreshed
+the push state has added anew url to the history
+we can leverage this to navigate around the app
+the history api only modifies the url, it doesnt change the document, this task is left for us to handle
+Angular routing module uses history aoi to swap components and monitor it
+
+## routerLinkActive
+
+It performs a partial match. We can override it my providing options (routerLinkActiveOptions)
+
+## RouterModule
+
+we have two functions for registering routes
+
+- RouterModule.forRoot(routes)
+  registers a service called router
+
+- RouterModule.forChild(routes)
+  it doesnt as router has been already registered, this is to create routes without registering another instance of routing object
+
+## nullish coalescing (??)
+
+a logical operator that returns its right-hand side operand when its left-hand side operand is null or undefined , and otherwise returns its left-hand side operand.
+
+## route parameters
+
+It is placeholder for any value like
+clip/:id
+
+- Problem
+  When we are redirecting to same page, it dont destroy the component, but we need new route parameter, so how?
+  we replace this
+
+  ```bash
+  this.route.snapshot.params.id
+  ```
+
+  with
+  observable
+
+  ```bash
+  this.route.params.subscribe((params: Params) => {
+      this.id = params.id;
+    });
+  ```
+
+## Query Parameters
+
+we use it to filter and sort through data
