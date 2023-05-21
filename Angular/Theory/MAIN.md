@@ -350,3 +350,8 @@ clip/:id
 ## Query Parameters
 
 we use it to filter and sort through data
+
+## Mime Types
+
+- A label to identify the type of data in a file
+- Broken into two parts. The type and subtype separated by a slash
