@@ -11,7 +11,6 @@ import { ModalService } from '../../services/modal.service';
 import IClip from '../../models/clip.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClipService } from '../../services/clip.service';
-import { update } from '@angular/fire/database';
 
 @Component({
   selector: 'app-edit',

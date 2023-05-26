@@ -25,3 +25,50 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## FFMPeg Files
+
+FFMPeg is split into two packages
+1.  FFMPEG
+2.  Core (WA) -> exports FFMPeg as a Web assembly file
+    it loads file through http, stored in node_modules/@ffmpeg/core/dist
+    by default files in node_modules are not publicly accessible through http
+    
+    we need those files, so modify angular.json's assets
+
+    ```bash
+    {
+    "input": "node_modules/@ffmpeg/core/dist",
+    "output": "node_modules/@ffmpeg/core/dist",
+    "glob": "*"
+    }
+    ```
+   
+GLOB:
+-  Angular installs this package for searching through folders 
+
+## Web Workers
+
+Scripts that run on different thread than the main thread
+if a web worker had blocking code, it wont block main thread
+A web worker dont have access to document.
+sending data from main thread to web worker can take time
+so SharedArrayBuffer was introduced
+
+## SharedArrayBuffer
+An object shared between the main thread and web workers.
+Browsers turn this feature off because of some vulnerabilities 
+but after patching they enabled it again.
+
+To enable it, we need to add headers to responses
+
+in angular.json
+
+```bash
+  "options": {
+      "headers": {
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "Cross-Origin-Embedder-Policy": "same-origin"
+      }
+  }
+````
