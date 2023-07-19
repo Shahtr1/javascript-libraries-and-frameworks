@@ -39,20 +39,40 @@ function logValue(x: Date | string) {
 
 // using type predicates
 
+// The purpose of using the isFish type guard is to enable the TypeScript compiler
+// to infer the correct type within the if and else branches of the getFood function.
+// By checking if pet is a fish, TypeScript can narrow down the type within the if block,
+// allowing you to access the swim method without any compilation errors.
+// Similarly, within the else block, the type is narrowed down to Bird,
+// allowing you to access the fly method if needed.
+
+// The getFood function also takes a parameter pet of type Fish | Bird.
+// It uses the isFish type guard to determine the type of pet. If isFish(pet) returns true,
+//  it means pet is a fish, so the function returns the string "fish food".
+// Otherwise, it returns the string "bird food".
+
 type Fish = { swim: () => void };
 type Bird = { fly: () => void };
+type Cat = { meow: () => void };
 
-function isFish(pet: Fish | Bird): pet is Fish {
+function isFish(pet: Fish | Bird | Cat): pet is Fish {
   return (pet as Fish).swim !== undefined;
 }
 
-function getFood(pet: Fish | Bird) {
+function isBird(pet: Fish | Bird | Cat): pet is Bird {
+  return (pet as Bird).fly !== undefined;
+}
+
+function getFood(pet: Fish | Bird | Cat) {
   if (isFish(pet)) {
-    pet;
+    pet.swim;
     return "fish food";
-  } else {
-    pet;
+  } else if (isBird(pet)) {
+    pet.fly;
     return "bird Food";
+  } else {
+    pet.meow;
+    return "cat Food";
   }
 }
 
