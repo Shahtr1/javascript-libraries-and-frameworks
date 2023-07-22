@@ -1,0 +1,3 @@
+[submodule "Typescript/zod-message-bus"]
+	path = Typescript/zod-message-bus
+	url = https://github.com/Shahtr1/zod-message-bus.git
