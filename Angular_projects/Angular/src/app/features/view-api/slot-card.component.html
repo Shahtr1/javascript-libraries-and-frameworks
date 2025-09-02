@@ -1,0 +1,23 @@
+<div class="card">
+    <div class="card-body">
+        <ng-container *ngTemplateOutlet="headerTpl ?? defaultHeader"></ng-container>
+        <!-- 
+        The *ngTemplateOutlet directive is used to render either the custom template (if provided) or the default template:
+        -->
+
+        <div class="input-group my-2">
+            <span class="input-group-text">Search</span>
+            <input #searchInput type="text" class="form-control" placeholder="Type…" />
+            <button class="btn btn-outline-secondary" (click)="focusSearch()">Focus</button>
+        </div>
+
+        <ng-content></ng-content>
+
+        <ng-container *ngTemplateOutlet="footerTpl ?? defaultFooter"></ng-container>
+
+        <ng-template #defaultHeader>
+            <h5 class="card-title m-0">Default Header</h5>
+        </ng-template>
+        <ng-template #defaultFooter><small class="text-muted">Default footer</small></ng-template>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="app-layout d-flex">
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar bg-dark text-light d-flex flex-column">
+    <a class="navbar-brand px-3 py-3 text-light text-decoration-none" routerLink="/">Resume NG</a>
+
+    <!-- Scrollable nav area -->
+    <nav class="nav nav-pills flex-column px-2 sidebar-nav">
+      <a class="nav-link text-light" routerLink="/dashboard" routerLinkActive="active bg-secondary rounded"
+        [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+
+      <a class="nav-link text-light" routerLink="/cd-demo" routerLinkActive="active bg-secondary rounded">Change
+        Detection</a>
+
+      <a class="nav-link text-light" routerLink="/forms/template"
+        routerLinkActive="active bg-secondary rounded">Template Form</a>
+
+      <a class="nav-link text-light" routerLink="/forms/reactive"
+        routerLinkActive="active bg-secondary rounded">Reactive Form</a>
+
+      <a class="nav-link text-light" routerLink="/state-demo" routerLinkActive="active bg-secondary rounded">NGXS
+        Demo</a>
+
+      <a class="nav-link text-light" routerLink="/ngrx-demo" routerLinkActive="active bg-secondary rounded">NgRx
+        Demo</a>
+
+      <a class="nav-link text-light" routerLink="/view-api">View APIs</a>
+
+      <!-- any (default) -->
+      <button class="btn btn-outline-secondary" *hasRole="'manager'">Manager Button</button>
+
+      <!-- all -->
+      <div class="alert alert-warning mt-2" *hasRole="['user','admin']; mode: 'all'">
+        Visible only if user has BOTH user and admin.
+      </div>
+    </nav>
+
+    <!-- Footer area (stays pinned) -->
+    <div class="sidebar-footer p-3 border-top border-secondary">
+      <label class="small d-block mb-1">Roles:</label>
+      <select class="form-select form-select-sm" [(ngModel)]="selectedRoles" (ngModelChange)="auth.setRoles($event)">
+        <option *ngFor="let r of roles" [ngValue]="r">
+          {{ r.join(',') }}
+        </option>
+      </select>
+      <!--
+      [(ngModel)]="selectedRoles"
+      Two-way binding sugar. Angular expands it to: 
+      [ngModel]="selectedRoles"
+      (ngModelChange)="selectedRoles = $event"
+
+      So when the user picks an option, Angular sets selectedRoles to the value of the selected <option>.
+
+        (ngModelChange)="auth.setRoles($event)"
+        You also wired the same event to call your service. So on every change:
+
+        selectedRoles is updated (because of the two-way binding), and
+
+        auth.setRoles($event) runs with the new value.
+
+        It’s fine to use both. Think of it as: update my local state and push it to the auth service.
+
+        [ngValue]="r" on <option>
+        This is key. roles is a Role[][], and each r is a Role[] (e.g. ['user','admin']).
+
+        [ngValue] binds the actual object/array to the option.
+
+        If you used plain value="...", it would be a string (e.g. "user,admin"), which is not what you want.
+
+        So when an option is selected, $event (and selectedRoles) is that real Role[], not a string.
+      -->
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content flex-grow-1 p-3">
+    <router-outlet></router-outlet>
+  </main>
+</div>

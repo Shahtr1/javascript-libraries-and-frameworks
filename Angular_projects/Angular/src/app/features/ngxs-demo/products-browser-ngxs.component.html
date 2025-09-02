@@ -1,0 +1,61 @@
+<div class="container py-3">
+    <h2 class="mb-3">NGXS State Demo — Products</h2>
+
+    <div class="row g-3">
+        <!-- Left: list -->
+        <div class="col-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="m-0">Products</h5>
+                <button class="btn btn-sm btn-outline-primary" (click)="newProduct()">+ New</button>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    *ngFor="let p of items$ | async; trackBy: trackById" (click)="select(p)"
+                    [class.active]="(selected$ | async)?.id === p.id" style="cursor:pointer">
+                    <span>{{ p.name }}</span>
+                    <span class="badge bg-secondary">{{ p.price | toInr }}</span>
+                </li>
+                <li *ngIf="(items$ | async)?.length === 0" class="list-group-item">No products</li>
+            </ul>
+        </div>
+
+        <!-- Right: editor -->
+        <div class="col-md-7">
+            <form [formGroup]="form" (ngSubmit)="save()" novalidate class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Editor</h5>
+
+                    <div class="mb-2">
+                        <label class="form-label">Name</label>
+                        <input class="form-control" formControlName="name" />
+                        <div class="text-danger" *ngIf="form.controls['name'].invalid && form.controls['name'].touched">
+                            Name is required (min 2)
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-control" formControlName="price" />
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="stock" formControlName="inStock" />
+                        <label class="form-check-label" for="stock">In stock</label>
+                    </div>
+
+                    <button class="btn btn-success" type="submit" [disabled]="form.invalid || saving">Save</button>
+                    <button class="btn btn-outline-secondary ms-2" type="button" (click)="reset()">Reset</button>
+                    <span *ngIf="saved" class="ms-2 text-success">✓ Saved</span>
+                </div>
+            </form>
+
+            <div class="mt-3">
+                <small class="text-muted">
+                    This page uses: NGXS <code>Load/Select/Save</code> actions, <code>async</code> pipe,
+                    OnPush, <code>trackBy</code>, and form patching from selected state.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

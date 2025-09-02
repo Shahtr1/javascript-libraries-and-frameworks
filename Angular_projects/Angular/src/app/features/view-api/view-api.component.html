@@ -1,0 +1,46 @@
+<div class="container py-3">
+    <h2>Advanced View APIs</h2>
+    <p class="text-muted">ViewChild · ViewChildren · ContentChild · TemplateRef · ViewContainerRef</p>
+
+    <app-slot-card #card>
+        <!-- Projected header/footer -->
+        <ng-template #headerTpl>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title m-0">Projected Header</h5>
+                <button class="btn btn-sm btn-outline-primary" (click)="focusFromParent()">Focus input (via
+                    ViewChild)</button>
+            </div>
+        </ng-template>
+
+        <div class="mt-2" appHighlight="#e7f1ff">
+            <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm btn-outline-success" (click)="add()">+ Add item</button>
+                <button class="btn btn-sm btn-outline-secondary" (click)="prependDynamic()">Insert dynamic
+                    banner</button>
+                <button class="btn btn-sm btn-outline-danger" (click)="clearDynamic()">Clear dynamic</button>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    *ngFor="let it of items; trackBy: trackById" #row>
+                    <span>{{ it.name }}</span>
+                    <span class="badge bg-secondary">{{ it.price | toInr }}</span>
+                </li>
+            </ul>
+        </div>
+
+        <ng-template #footerTpl>
+            <small class="text-muted">Rows in view: {{ rowsCount }}</small>
+        </ng-template>
+    </app-slot-card>
+
+    <!-- Host for dynamic insertions -->
+    <ng-template #dynamicHost></ng-template>
+
+    <!-- What we will render dynamically -->
+    <ng-template #banner let-count="count">
+        <div class="alert alert-info mt-3">
+            <strong>Dynamic banner</strong> — you currently have {{ count }} items.
+        </div>
+    </ng-template>
+</div>

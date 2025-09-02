@@ -1,0 +1,52 @@
+<div class="container py-3">
+    <h2 class="mb-3">NgRx State Demo — Products</h2>
+
+    <div class="row g-3">
+        <div class="col-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="m-0">Products</h5>
+                <button class="btn btn-sm btn-outline-primary" (click)="newProduct()">+ New</button>
+            </div>
+
+            <ng-container *ngIf="(loading$ | async) === false; else loadingTpl">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngFor="let p of (items$ | async); trackBy: trackById" (click)="select(p)"
+                        [class.active]="(selected$ | async)?.id === p.id" style="cursor:pointer">
+                        <span>{{ p.name }}</span>
+                        <span class="badge bg-secondary">{{ p.price | toInr }}</span>
+                    </li>
+                </ul>
+            </ng-container>
+            <ng-template #loadingTpl>
+                <div class="alert alert-info">Loading...</div>
+            </ng-template>
+        </div>
+
+        <div class="col-md-7">
+            <form [formGroup]="form" (ngSubmit)="save()" novalidate class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Editor</h5>
+
+                    <div class="mb-2">
+                        <label class="form-label">Name</label>
+                        <input class="form-control" formControlName="name" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-control" formControlName="price" />
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="stock2" formControlName="inStock" />
+                        <label class="form-check-label" for="stock2">In stock</label>
+                    </div>
+
+                    <button class="btn btn-success" type="submit" [disabled]="form.invalid">Save</button>
+                    <button class="btn btn-outline-secondary ms-2" type="button" (click)="reset()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

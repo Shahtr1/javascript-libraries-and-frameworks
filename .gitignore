@@ -2,21 +2,23 @@
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+**/.angular/**
+
 # compiled output
-/Angular/ngrx/dist
-/Angular/ngrx/tmp
-/Angular/ngrx/out-tsc
+/Angular_projects/ngrx/dist
+/Angular_projects/ngrx/tmp
+/Angular_projects/ngrx/out-tsc
 
 # dependencies
-/Angular/ngrx/node_modules
+/Angular_projects/ngrx/node_modules
 
 # IDEs and editors
-/Angular/ngrx/.idea
-/Angular/ngrx.project
-/Angular/ngrx.classpath
-/Angular/ngrx.c9/
+/Angular_projects/ngrx/.idea
+/Angular_projects/ngrx.project
+/Angular_projects/ngrx.classpath
+/Angular_projects/ngrx.c9/
 *.launch
-/Angular/ngrx.settings/
+/Angular_projects/ngrx.settings/
 *.sublime-workspace
 
 # IDE - VSCode
@@ -27,11 +29,11 @@
 !.vscode/extensions.json
 
 # misc
-/Angular/ngrx/.angular/cache
-/Angular/ngrx/.sass-cache
-/Angular/ngrx/connect.lock
-/Angular/ngrx/coverage
-/Angular/ngrx/libpeerconnection.log
+/Angular_projects/ngrx/.angular/cache
+/Angular_projects/ngrx/.sass-cache
+/Angular_projects/ngrx/connect.lock
+/Angular_projects/ngrx/coverage
+/Angular_projects/ngrx/libpeerconnection.log
 npm-debug.log
 testem.log
 /typings

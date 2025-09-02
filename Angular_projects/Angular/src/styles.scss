@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+.app-layout {
+  min-height: 100vh;
+}
+
+/* Sidebar sizing + independent vertical scroll */
+.sidebar {
+  width: 200px; /* tweak as you like */
+  height: 100vh; /* full viewport height */
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make only the nav list scroll, keep brand/footer visible */
+.sidebar-nav {
+  flex: 1 1 auto;
+  min-height: 0; /* IMPORTANT for flex child scrolling */
+  overflow-y: auto;
+}
+
+/* Optional: nicer active link contrast on dark bg */
+.nav-link.active {
+  color: #fff;
+}

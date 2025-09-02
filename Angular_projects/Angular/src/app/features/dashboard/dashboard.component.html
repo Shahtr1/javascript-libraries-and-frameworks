@@ -1,0 +1,16 @@
+<section>
+    <h1 class="mt-2">Dashboard</h1>
+    <p class="text-muted">Bootstrap + custom Pipe/Directive ready.</p>
+
+    <div class="d-flex align-items-center gap-2">
+        <span>Sample price:</span>
+        <strong>{{ 2599 | toInr }}</strong>
+    </div>
+
+    <button class="btn btn-primary mt-3" [debounceTime]="600" (debounceClick)="onClick($event)">
+        Click me (debounced)
+    </button>
+    <div class="mt-2">Debounced clicks: <strong>{{ clicked }}</strong></div>
+
+
+</section>

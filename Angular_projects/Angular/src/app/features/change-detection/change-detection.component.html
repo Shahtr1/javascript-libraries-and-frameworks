@@ -1,0 +1,36 @@
+<div class="container py-3">
+    <h2 class="mb-3">Change Detection Demo</h2>
+
+    <div class="d-flex gap-2 mb-3">
+        <button class="btn btn-outline-secondary" (click)="inc()">Increment counter</button>
+        <button class="btn btn-outline-primary" (click)="mutate()">Mutate products (push)</button>
+        <button class="btn btn-outline-success" (click)="replace()">Replace products (new ref)</button>
+        <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <app-child-default [counter]="counter" [products]="products"></app-child-default>
+        </div>
+        <div class="col-md-6">
+            <app-child-onpush [counter]="counter" [products]="products"></app-child-onpush>
+        </div>
+    </div>
+
+    <table class="table table-sm mt-3">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of products">
+                <td>{{ p.id }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.price | toInr }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
