@@ -35,3 +35,7 @@ math.remapPoint = (oldBounds, newBounds, point) => {
     ),
   ];
 };
+
+math.scale = (p, scaler) => {
+  return [p[0] * scaler, p[1] * scaler];
+};

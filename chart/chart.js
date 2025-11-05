@@ -48,10 +48,13 @@ class Chart {
       if (dragInfo.dragging) {
         const dataLoc = this.#getMouse(evt, true);
         dragInfo.end = dataLoc;
-        dragInfo.offset = math.subtract(dragInfo.start, dragInfo.end);
+        dragInfo.offset = math.scale(
+          math.subtract(dragInfo.start, dragInfo.end),
+          dataTrans.scale
+        );
 
         const newOffset = math.add(dataTrans.offset, dragInfo.offset);
-        this.#updateDataBounds(newOffset);
+        this.#updateDataBounds(newOffset, dataTrans.scale);
         this.#draw();
       }
     };
@@ -59,14 +62,40 @@ class Chart {
       dataTrans.offset = math.add(dataTrans.offset, dragInfo.offset);
       dragInfo.dragging = false;
     };
+    canvas.onwheel = (evt) => {
+      const dir = Math.sign(evt.deltaY);
+      const step = 0.02;
+      dataTrans.scale += dir * step;
+
+      // clamp between two values
+      // Why:
+      // Chech Readme.md for more info
+      dataTrans.scale = Math.max(step, Math.min(2, dataTrans.scale));
+
+      this.#updateDataBounds(dataTrans.offset, dataTrans.scale);
+
+      this.#draw();
+      evt.preventDefault();
+    };
   }
 
-  #updateDataBounds(offset) {
+  #updateDataBounds(offset, scale) {
     const { dataBounds, defaultDataBounds: def } = this;
     dataBounds.left = def.left + offset[0];
     dataBounds.right = def.right + offset[0];
     dataBounds.top = def.top + offset[1];
     dataBounds.bottom = def.bottom + offset[1];
+
+    const center = [
+      (dataBounds.left + dataBounds.right) / 2,
+      (dataBounds.top + dataBounds.bottom) / 2,
+    ];
+
+    // More info on why we use ** 2, is on Readme.md
+    dataBounds.left = math.lerp(center[0], dataBounds.left, scale ** 2);
+    dataBounds.right = math.lerp(center[0], dataBounds.right, scale ** 2);
+    dataBounds.top = math.lerp(center[1], dataBounds.top, scale ** 2);
+    dataBounds.bottom = math.lerp(center[1], dataBounds.bottom, scale ** 2);
   }
 
   #getMouse = (evt, dataSpace = false) => {
@@ -75,7 +104,7 @@ class Chart {
     if (dataSpace) {
       const dataLoc = math.remapPoint(
         this.pixelBounds,
-        this.dataBounds,
+        this.defaultDataBounds,
         pixelLoc
       );
       return dataLoc;
