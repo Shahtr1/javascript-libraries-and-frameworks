@@ -2,6 +2,14 @@ const math = {};
 
 math.lerp = (a, b, t) => a + (b - a) * t;
 
+math.add = (p1, p2) => {
+  return [p1[0] + p2[0], p1[1] + p2[1]];
+};
+
+math.subtract = (p1, p2) => {
+  return [p1[0] - p2[0], p1[1] - p2[1]];
+};
+
 math.formatNumber = (n, decimals = 0) => n.toFixed(decimals);
 
 math.invLerp = (a, b, v) => (v - a) / (b - a);
