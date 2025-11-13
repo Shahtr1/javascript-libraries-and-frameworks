@@ -31,7 +31,32 @@ graphics.generateImages = (styles, size = 20) => {
     ctx.textBaseline = "middle";
     ctx.font = size + "px courier";
 
-    ctx.filter = "grayscale(1)";
+    const colorHueMap = {
+      red: 0,
+      yellow: 60,
+      green: 120,
+      cyan: 180,
+      blue: 240,
+      magenta: 300,
+    };
+
+    // -45 is because sepia moves to 45 degrees,
+    // and we are cancelling it out, hue(0) is red
+    const hue = -45 + colorHueMap[style.color];
+
+    if (!isNaN(hue)) {
+      ctx.filter = `
+        brightness(2)
+        contrast(0.3)
+        sepia(1)
+        brightness(0.7)
+        hue-rotate(${hue}deg)
+        saturate(3)
+        contrast(3)
+      `;
+    } else {
+      ctx.filter = "grayscale(1)";
+    }
 
     ctx.fillText(style.text, canvas.width / 2, canvas.height / 2);
 
